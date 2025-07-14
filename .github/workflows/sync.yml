@@ -1,11 +1,8 @@
-  name: 🔄 Sincronizar Noticias Automáticamente
+name: 🔄 Sincronizar Noticias Automáticamente
 
 on:
   schedule:
-    # Ejecutar cada 2 horas (cron: minuto hora día mes día_semana)
     - cron: '0 */2 * * *'
-  
-  # Permitir ejecución manual desde GitHub
   workflow_dispatch:
 
 jobs:
@@ -35,8 +32,3 @@ jobs:
         echo "🚀 Iniciando sincronización de noticias..."
         python sync_news.py
         echo "✅ Sincronización completada"
-    
-    - name: 📊 Mostrar estadísticas
-      run: |
-        echo "📈 Proceso de sincronización finalizado"
-        echo "⏰ Hora de ejecución: $(date)"
