@@ -1,0 +1,42 @@
+  name: 🔄 Sincronizar Noticias Automáticamente
+
+on:
+  schedule:
+    # Ejecutar cada 2 horas (cron: minuto hora día mes día_semana)
+    - cron: '0 */2 * * *'
+  
+  # Permitir ejecución manual desde GitHub
+  workflow_dispatch:
+
+jobs:
+  sync-news:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: 📥 Checkout código
+      uses: actions/checkout@v4
+    
+    - name: 🐍 Configurar Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+    
+    - name: 📦 Instalar dependencias
+      run: |
+        python -m pip install --upgrade pip
+        pip install requests beautifulsoup4 lxml
+    
+    - name: 🔄 Ejecutar sincronización
+      env:
+        WP_SITE_URL: ${{ secrets.WP_SITE_URL }}
+        WP_USERNAME: ${{ secrets.WP_USERNAME }}
+        WP_APP_PASSWORD: ${{ secrets.WP_APP_PASSWORD }}
+      run: |
+        echo "🚀 Iniciando sincronización de noticias..."
+        python sync_news.py
+        echo "✅ Sincronización completada"
+    
+    - name: 📊 Mostrar estadísticas
+      run: |
+        echo "📈 Proceso de sincronización finalizado"
+        echo "⏰ Hora de ejecución: $(date)"
